@@ -2,7 +2,7 @@ from datetime import datetime
 
 import click
 
-from tools import background, nasa_api
+from tools import background, jenkins_api
 from tools.utils import parse_str_to_date
 
 
@@ -28,17 +28,17 @@ def update(date, auto):
 
     try:
         # Download and print information about
-        meta_info = nasa_api.get_info(date)
+        meta_info = jenkins_api.get_info(date)
         click.echo(f"Title: {meta_info['title']}\n")
         click.echo(meta_info['explanation'] + "\n")
 
         # Check if auto is selected, otherwise prompt user to set it as background
-        if auto or click.confirm("Do you wish to download this image and set it as background?"):
+        if auto or click.confirm("Do you wish to download this json and set it as background?"):
             # Download and set the background
-            file_path = nasa_api.download_image(date)
+            file_path = jenkins_api.download_json(date)
             background.change_background(file_path, auto)
     except KeyError:
-        click.echo(f"Image not found for the selected date {date}. ")
+        click.echo(f"json not found for the selected date {date}. ")
     except Exception as e:
         click.echo("Fatal error encountered, exiting program.")
         click.echo(e)
